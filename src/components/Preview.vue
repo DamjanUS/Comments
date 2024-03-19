@@ -3,9 +3,12 @@
     <video @timeupdate="videoUpdate" width="640" height="320" controls>
       <source :src="videoUrl" type="video/mp4" />
     </video>
+    <div>
+      <div v-for="(comment, idx) in filteredComments" :key="idx">
+        {{ comment.comment }} from {{ comment.name }}
+      </div>
+    </div>
     <hr />
-    <pre>{{ entry.comments }}</pre>
-    <pre>{{ filteredComments }}</pre>
   </div>
 </template>
 
@@ -17,7 +20,7 @@ const extractFileId = (url) => {
   if (match && match[1]) {
     return match[1];
   } else {
-    return null; // Return null if the URL format doesn't match
+    return null;
   }
 };
 
@@ -39,7 +42,6 @@ export default {
     videoUrl() {
       const fileId = extractFileId(this.entry.driveUrl);
       const c = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
-      console.log(c);
       return c;
     },
   },
